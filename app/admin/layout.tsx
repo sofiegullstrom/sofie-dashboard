@@ -1,5 +1,6 @@
 import Sidebar from "@/components/Sidebar";
 import TeamBubbles from "@/components/TeamBubbles";
+import ChatAgent from "@/components/ChatAgent";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,6 +10,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="max-w-5xl mx-auto px-6 py-6">{children}</div>
       </main>
       <TeamBubbles />
+      <ChatAgent />
     </div>
   );
 }

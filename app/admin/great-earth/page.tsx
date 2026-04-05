@@ -1,6 +1,6 @@
 import { Leaf, TrendingUp, FileText, Link } from "lucide-react";
 import GreatEarthCountdown from "@/components/GreatEarthCountdown";
-import ProjectStatusBars from "@/components/ProjectStatusBar";
+import MonthlyGoals from "@/components/MonthlyGoals";
 import QuickNote from "@/components/QuickNote";
 
 const milestones = [
@@ -83,8 +83,8 @@ export default function GreatEarthPage() {
 
         <div className="space-y-4">
           <GreatEarthCountdown deadlineDate="2025-06-01T00:00:00" deadlineLabel="Lansering" />
-          <ProjectStatusBars
-            projects={[{ name: "Great Earth", progress: 55, color: "from-emerald-400 to-teal-300", tasks: 11, done: 6 }]}
+          <MonthlyGoals
+            goals={[{ name: "Great Earth", goal: "Nyhetsbrev skickade", current: 2, target: 4, unit: "st", color: "from-emerald-400 to-teal-300" }]}
           />
         </div>
       </div>

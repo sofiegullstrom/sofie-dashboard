@@ -1,9 +1,9 @@
 import { format } from "date-fns";
 import { sv } from "date-fns/locale";
-import { Clock, Flame, CheckCircle2 } from "lucide-react";
+import { Flame, CheckCircle2 } from "lucide-react";
 import QuickNote from "@/components/QuickNote";
 import GreatEarthCountdown from "@/components/GreatEarthCountdown";
-import ProjectStatusBars from "@/components/ProjectStatusBar";
+import MonthlyGoals from "@/components/MonthlyGoals";
 import TodayTasks from "@/components/TodayTasks";
 
 const topPriorities = [
@@ -19,22 +19,9 @@ export default function AdminPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-black text-purple-900">
-            Hej Sofie! ✨
-          </h1>
-          <p className="text-sm text-purple-400 mt-0.5">{capitalizedToday}</p>
-        </div>
-        <div className="flex items-center gap-2 text-xs text-gray-400 bg-white rounded-xl px-3 py-2 border border-purple-50 shadow-sm">
-          <Clock size={13} />
-          <span>
-            {new Date().toLocaleTimeString("sv-SE", {
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </span>
-        </div>
+      <div>
+        <h1 className="text-2xl font-black text-purple-900">Hej Sofie! ✨</h1>
+        <p className="text-sm text-purple-400 mt-0.5">{capitalizedToday}</p>
       </div>
 
       {/* Main grid */}
@@ -50,13 +37,9 @@ export default function AdminPage() {
             <div className="space-y-2">
               {topPriorities.map((p, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <span className="text-purple-300 font-black text-sm">
-                    {i + 1}.
-                  </span>
+                  <span className="text-purple-300 font-black text-sm">{i + 1}.</span>
                   <p className="text-sm text-gray-700 flex-1">{p.text}</p>
-                  <span
-                    className={`text-xs px-2 py-0.5 rounded-full font-medium ${p.color}`}
-                  >
+                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${p.color}`}>
                     {p.tag}
                   </span>
                 </div>
@@ -64,10 +47,7 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* Today's Tasks */}
           <TodayTasks />
-
-          {/* Quick Note */}
           <QuickNote />
         </div>
 
@@ -86,14 +66,12 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* Countdown */}
           <GreatEarthCountdown
             deadlineDate="2025-06-01T00:00:00"
             deadlineLabel="Great Earth lansering"
           />
 
-          {/* Project Status */}
-          <ProjectStatusBars />
+          <MonthlyGoals />
         </div>
       </div>
     </div>

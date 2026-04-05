@@ -52,9 +52,15 @@ export default function TodayTasks() {
   const [newTaskTitle, setNewTaskTitle] = useState("");
 
   function handleStatusChange(id: string, status: Task["status"]) {
-    setTasks((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, status } : t))
-    );
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, status } : t)));
+  }
+
+  function handleDelete(id: string) {
+    setTasks((prev) => prev.filter((t) => t.id !== id));
+  }
+
+  function handleUpdate(updated: Task) {
+    setTasks((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
   }
 
   function handleAddTask() {
@@ -79,12 +85,20 @@ export default function TodayTasks() {
   const hours = Math.floor(totalMinutes / 60);
   const mins = totalMinutes % 60;
 
+  const sortedTasks = [...tasks].sort((a, b) => {
+    const order = { high: 0, medium: 1, low: 2 };
+    return order[a.priority] - order[b.priority];
+  });
+
   return (
     <div className="bg-white rounded-2xl p-5 shadow-sm border border-purple-50">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-sm font-bold text-gray-700 flex items-center gap-2">
           <CalendarDays size={15} className="text-purple-400" />
           Dagens uppgifter
+          <span className="text-xs font-normal text-gray-400 ml-1">
+            {tasks.filter((t) => t.status === "done").length}/{tasks.length} klara
+          </span>
         </h2>
         <div className="flex items-center gap-3">
           <span className="text-xs text-gray-400">
@@ -120,18 +134,15 @@ export default function TodayTasks() {
       )}
 
       <div className="space-y-2">
-        {tasks
-          .sort((a, b) => {
-            const order = { high: 0, medium: 1, low: 2 };
-            return order[a.priority] - order[b.priority];
-          })
-          .map((task) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              onStatusChange={handleStatusChange}
-            />
-          ))}
+        {sortedTasks.map((task) => (
+          <TaskCard
+            key={task.id}
+            task={task}
+            onStatusChange={handleStatusChange}
+            onDelete={handleDelete}
+            onUpdate={handleUpdate}
+          />
+        ))}
       </div>
     </div>
   );
