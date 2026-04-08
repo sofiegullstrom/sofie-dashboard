@@ -147,7 +147,7 @@ export default function ProjectPage({
               </div>
             )}
           </div>
-          <QuickNote />
+          <QuickNote currentProject={name} />
         </div>
 
         {/* Progress */}

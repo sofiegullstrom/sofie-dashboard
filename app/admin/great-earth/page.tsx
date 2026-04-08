@@ -133,7 +133,7 @@ export default function GreatEarthPage() {
             </div>
           </div>
 
-          <QuickNote />
+          <QuickNote currentProject="Great Earth" />
         </div>
 
         <div className="space-y-4">
