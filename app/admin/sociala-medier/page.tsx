@@ -3,8 +3,10 @@
 import { useState } from "react";
 import {
   TrendingUp, Eye, Users, Heart, MessageCircle, Share2,
-  Target, Clock, Sparkles, RefreshCw, ChevronUp, Award
+  Clock, Sparkles, RefreshCw, ChevronUp, Award, Plus, Loader2
 } from "lucide-react";
+import TaskCard from "@/components/TaskCard";
+import { useProjectTasks } from "@/hooks/useProjectTasks";
 
 // ── Real stats (April 2026) ──────────────────────────────────────────────────
 
@@ -145,6 +147,9 @@ function IdeaCard({ idea, accent }: { idea: { title: string; why: string; tag: s
 // ── Page ─────────────────────────────────────────────────────────────────────
 
 export default function SocialMediaPage() {
+  const { tasks, loading: tasksLoading, addTask, updateTask, deleteTask } = useProjectTasks("Sociala medier");
+  const [showAddTask, setShowAddTask] = useState(false);
+  const [newTaskTitle, setNewTaskTitle] = useState("");
   const [showUpdateForm, setShowUpdateForm] = useState(false);
   const [form, setForm] = useState<UpdateForm>({
     tiktok_views: "", tiktok_reach: "", tiktok_followers_new: "",
@@ -476,6 +481,85 @@ export default function SocialMediaPage() {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* ── Tasks ── */}
+      <div className="bg-white rounded-2xl p-5 shadow-sm border border-purple-50">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-bold text-gray-700">
+            Uppgifter
+            {!tasksLoading && tasks.length > 0 && (
+              <span className="ml-2 text-xs font-normal text-gray-400">
+                {tasks.filter((t) => t.status === "done").length}/{tasks.length} klara
+              </span>
+            )}
+          </h2>
+          <button
+            onClick={() => setShowAddTask(!showAddTask)}
+            className="w-6 h-6 bg-pink-100 text-pink-600 rounded-lg flex items-center justify-center hover:bg-pink-200 transition-colors"
+          >
+            <Plus size={14} />
+          </button>
+        </div>
+
+        {showAddTask && (
+          <div className="flex gap-2 mb-3">
+            <input
+              value={newTaskTitle}
+              onChange={(e) => setNewTaskTitle(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  addTask(newTaskTitle);
+                  setNewTaskTitle("");
+                  setShowAddTask(false);
+                }
+              }}
+              placeholder="Ny uppgift..."
+              className="flex-1 text-sm px-3 py-2 border border-pink-200 rounded-xl focus:border-pink-400 focus:outline-none placeholder-gray-300"
+              autoFocus
+            />
+            <button
+              onClick={() => { addTask(newTaskTitle); setNewTaskTitle(""); setShowAddTask(false); }}
+              className="px-3 py-2 bg-pink-400 text-white text-xs rounded-xl hover:bg-pink-500 font-medium"
+            >
+              Lägg till
+            </button>
+          </div>
+        )}
+
+        {tasksLoading ? (
+          <div className="flex items-center justify-center py-8 text-gray-300">
+            <Loader2 size={20} className="animate-spin" />
+          </div>
+        ) : tasks.length === 0 ? (
+          <p className="text-xs text-gray-400 text-center py-6">Inga uppgifter. Lägg till en!</p>
+        ) : (
+          <div className="space-y-2">
+            {[...tasks]
+              .sort((a, b) => {
+                if (a.status === "done" && b.status !== "done") return 1;
+                if (b.status === "done" && a.status !== "done") return -1;
+                const order = { high: 0, medium: 1, low: 2 };
+                return order[a.priority] - order[b.priority];
+              })
+              .map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onStatusChange={(id, status) => updateTask(id, { status })}
+                  onDelete={deleteTask}
+                  onUpdate={(updated) =>
+                    updateTask(updated.id, {
+                      title: updated.title,
+                      description: updated.description,
+                      priority: updated.priority,
+                      estimated_minutes: updated.estimated_minutes,
+                    })
+                  }
+                />
+              ))}
+          </div>
+        )}
       </div>
     </div>
   );
