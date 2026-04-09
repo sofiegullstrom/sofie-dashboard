@@ -137,10 +137,8 @@ export default function GreatEarthPage() {
         </div>
 
         <div className="space-y-4">
-          <GreatEarthCountdown deadlineDate="2025-06-01T00:00:00" deadlineLabel="Lansering" />
-          <MonthlyGoals
-            goals={[{ name: "Great Earth", goal: "Nyhetsbrev skickade", current: 2, target: 4, unit: "st", color: "from-emerald-400 to-teal-300" }]}
-          />
+          <GreatEarthCountdown />
+          <MonthlyGoals />
         </div>
       </div>
     </div>
